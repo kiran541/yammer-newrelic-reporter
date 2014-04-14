@@ -5,11 +5,10 @@ package com.hightail.metrics.rest;
  */
 public class NewRelic {
 
-    private String endpointURI = "https://platform-api.newrelic.com/platform/v1/metrics";
+    private String endpointURI = "https://platform-api.newrelic.com/platform/v1/definedMetrics";
     private String licenseKey;
     private String componentName;
     private String appId;
-    private int duration;
 
     /**
      * The New Relic instance that has the custom properties defined
@@ -22,13 +21,12 @@ public class NewRelic {
      *
      */
     public NewRelic(String endpointURI, String licenseKey,
-                    String componentName, String appId, int duration) {
+                    String componentName, String appId) {
 
         this.endpointURI = endpointURI;
         this.licenseKey = licenseKey;
         this.componentName = componentName;
         this.appId = appId;
-        this.duration = duration;
 
     }
 
@@ -47,10 +45,5 @@ public class NewRelic {
     public String getAppId() {
         return appId;
     }
-
-    public int getDuration() {
-        return duration;
-    }
-
 
 }

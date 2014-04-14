@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  *
- * This is the factory class for getting appropriate NewRelic Reporter.
+ * This is the factory class for getting appropriate NewRelic Reporter Instance.
  *
  * The Madatory properties are:
  *   for Agent:
@@ -27,10 +27,10 @@ import java.util.concurrent.TimeUnit;
  *   for Httpv1:
  *      - MetricsRegistry
  *      - NewRelic License Key
- *      - Component Id
- *      - App Id
+ *      - Component Id (The list of components inside a plugin)
+ *      - App Id : com.companyname (companyname will appear as the plugin name on the left panel in the dashboard)
  *
- * The Default values, if not provided are:
+ * The Default properties, if not provided explicitly are:
  *      - rate Unit     : {@link java.util.concurrent.TimeUnit.SECONDS}
  *      - duration Unit : {@link java.util.concurrent.TimeUnit.MILLISECONDS}
  *      - metric filter : {@link com.codahale.metrics.MetricFilter.ALL}
@@ -96,19 +96,17 @@ public class NewRelicReporterFactory {
         String appId = properties.getProperty(NewRelicConstants.APP_ID);
 
         String prefix = (properties.containsKey(NewRelicConstants.PREFIX)) ? properties.getProperty(NewRelicConstants.PREFIX) :
-                null;
+                NewRelicConstants.DEFAULT_PREFIX;
         TimeUnit rateUnit = (properties.containsKey(NewRelicConstants.RATE_UNIT)) ? (TimeUnit) properties.get(NewRelicConstants.RATE_UNIT) :
-                TimeUnit.SECONDS ;
+                NewRelicConstants.DEFAULT_RATE_UNIT ;
         TimeUnit durationUnit = (properties.containsKey(NewRelicConstants.DURATION_UNIT)) ? (TimeUnit) properties.get(NewRelicConstants.DURATION_UNIT) :
-                TimeUnit.MILLISECONDS;
+                NewRelicConstants.DEFAULT_DURATION_UNIT;
         MetricFilter filter = (properties.containsKey(NewRelicConstants.METRIC_FILTER))? (MetricFilter) properties.get(NewRelicConstants.METRIC_FILTER):
-                MetricFilter.ALL;
-        int duration = Integer.parseInt(properties.getProperty(NewRelicConstants.DURATION));
+                NewRelicConstants.DEFAULT_METRIC_FILTER;
 
         NewRelic newRelic = new NewRelic(NewRelicConstants.DEFAULT_URL,licenseKey,
                 componentName,
-                appId,
-                duration);
+                appId);
 
         return NewRelicHTTPv1Reporter
                 .forRegistry(registry)
@@ -121,19 +119,20 @@ public class NewRelicReporterFactory {
 
     private static NewRelicReporter buildNewRelicAgentInstance(Properties properties) throws CannotCreateInstanceException {
 
+
         if(!properties.containsKey(NewRelicConstants.METRIC_REGISTRY) ||  properties.get(NewRelicConstants.METRIC_REGISTRY) == null) {
                 throw new CannotCreateInstanceException(NewRelicConstants.METRIC_REGISTRY+" is not provided");
         }
 
         MetricRegistry registry = (MetricRegistry) properties.get(NewRelicConstants.METRIC_REGISTRY);
         String prefix = (properties.containsKey(NewRelicConstants.PREFIX)) ? properties.getProperty(NewRelicConstants.PREFIX) :
-                null;
+                NewRelicConstants.DEFAULT_PREFIX;
         TimeUnit rateUnit = (properties.containsKey(NewRelicConstants.RATE_UNIT)) ? (TimeUnit) properties.get(NewRelicConstants.RATE_UNIT) :
-                TimeUnit.SECONDS ;
+                NewRelicConstants.DEFAULT_RATE_UNIT ;
         TimeUnit durationUnit = (properties.containsKey(NewRelicConstants.DURATION_UNIT)) ? (TimeUnit) properties.get(NewRelicConstants.DURATION_UNIT) :
-                TimeUnit.MILLISECONDS;
+                NewRelicConstants.DEFAULT_DURATION_UNIT;
         MetricFilter filter = (properties.containsKey(NewRelicConstants.METRIC_FILTER))? (MetricFilter) properties.get(NewRelicConstants.METRIC_FILTER):
-                MetricFilter.ALL;
+                NewRelicConstants.DEFAULT_METRIC_FILTER;
 
         return NewRelicAgentReporter
                 .forRegistry(registry)

@@ -11,9 +11,6 @@ import org.junit.Test;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
-/**
- * Created by hightail on 4/10/14.
- */
 public class NewRelicJMXReporterTest {
 
     @Test
@@ -30,6 +27,9 @@ public class NewRelicJMXReporterTest {
 
     }
 
+    /*
+       Reporting to all the 3 monitoring systems
+     */
     @Test
     public void testNewRelic() throws Exception {
         final MetricRegistry registry = new MetricRegistry();
